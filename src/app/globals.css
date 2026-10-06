@@ -1,26 +1,196 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  /* Notch black, with the coral, magenta and crimson of the app icon. */
+  --color-ink: #060608;
+  --color-ink-2: #0e0f13;
+  --color-ink-3: #17181e;
+  --color-ink-4: #22232b;
+  --color-paper: #f4f0ea;
+  --color-mute: #8e8c95;
+  --color-coral: #fe544d;
+  --color-magenta: #c11567;
+  --color-crimson: #d30a1c;
+  --color-lavender: #b4b9f0;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --animate-marquee: marquee var(--marquee-duration, 40s) linear infinite;
+  --animate-spectrum: spectrum 0.9s ease-in-out infinite alternate;
+  --animate-grain: grain 0.8s steps(4) infinite;
+
+  @keyframes marquee {
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+  @keyframes spectrum {
+    from {
+      transform: scaleY(0.25);
+    }
+    to {
+      transform: scaleY(1);
+    }
+  }
+  @keyframes scroll-cue {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(200%);
+    }
+  }
+  @keyframes grain {
+    0% {
+      transform: translate(0, 0);
+    }
+    25% {
+      transform: translate(-3%, 2%);
+    }
+    50% {
+      transform: translate(2%, -3%);
+    }
+    75% {
+      transform: translate(-2%, -1%);
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@theme inline {
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-jp: var(--font-dela), "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+  /* Latin from Geist, Japanese from the system's Japanese UI font. */
+  --font-jp-text:
+    var(--font-geist), "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Meiryo", "Noto Sans JP", sans-serif;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    background: var(--color-ink);
+    scrollbar-color: var(--color-coral) var(--color-ink);
+    scrollbar-width: thin;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--color-coral);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-coral);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  /* The preloader is skipped (before first paint) for repeat visits in a
+     session, for reduced motion, and without JavaScript. */
+  html[data-intro="skip"] [data-preloader] {
+    display: none;
+  }
+}
+
+@layer components {
+  .kicker {
+    @apply inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-mute uppercase;
+  }
+  .kicker::before {
+    content: "";
+    @apply size-1.5 rounded-full bg-coral;
+  }
+
+  /* Display type: Bricolage at a slightly condensed width, tight tracking. */
+  .display {
+    font-family: var(--font-display);
+    font-variation-settings:
+      "wdth" 84,
+      "opsz" 96;
+    font-weight: 640;
+    letter-spacing: -0.032em;
+    line-height: 0.9;
+  }
+
+  .halftone {
+    background-image: radial-gradient(circle at center, currentColor 1.1px, transparent 1.6px);
+    background-size: 7px 7px;
+  }
+
+  .scanlines {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      rgb(0 0 0 / 0.22) 0 1px,
+      transparent 1px 3px
+    );
+  }
+
+  /* Film grain over the whole page, drawn once from an SVG noise filter. */
+  .grain {
+    pointer-events: none;
+    position: fixed;
+    inset: -50%;
+    z-index: 90;
+    opacity: 0.07;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Keep in sync with WIDE and TALL in components/hero/hero-art.tsx. */
+  .hero-layout {
+    --fx: 0.66;
+    --fy: 0.5;
+    --s: 1.12;
+  }
+  @media (max-aspect-ratio: 11/10) {
+    .hero-layout {
+      --fx: 0.5;
+      --fy: 0.4;
+      --s: 0.84;
+    }
+  }
+
+  /* Outlined type; set the stroke colour with --outline. */
+  .text-outline {
+    color: transparent;
+    -webkit-text-stroke: 1.25px var(--outline, rgb(244 240 234 / 0.4));
+  }
+
+  .mask-fade-x {
+    mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  }
+
+  /* FAQ answers open with a height transition where the browser supports it. */
+  .faq {
+    interpolate-size: allow-keywords;
+  }
+  .faq::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition:
+      block-size 0.5s var(--ease-out-expo),
+      content-visibility 0.5s allow-discrete;
+  }
+  .faq[open]::details-content {
+    block-size: auto;
+  }
+  .faq summary::-webkit-details-marker {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-spectrum,
+  .animate-grain {
+    animation: none;
+  }
 }
