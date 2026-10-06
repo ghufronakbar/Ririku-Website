@@ -4,6 +4,7 @@ import { animate, motion } from "motion/react";
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import { site } from "@/content/site";
 import { useLenis } from "@/components/smooth-scroll";
+import { useI18n } from "@/i18n/provider";
 import { Spectrum } from "@/components/ui/spectrum";
 import { markIntroReady } from "@/lib/intro";
 
@@ -26,6 +27,7 @@ const MIN_DURATION = 1.7;
  * (see the script in layout.tsx).
  */
 export function Preloader() {
+  const { t } = useI18n();
   const [phase, setPhase] = useState<"loading" | "leaving" | "done">("loading");
   const skipped = useSyncExternalStore(noSubscribe, readSkipped, () => false);
   const counterRef = useRef<HTMLSpanElement>(null);
@@ -125,10 +127,10 @@ export function Preloader() {
         </div>
 
         <div className="flex items-end justify-between gap-6">
-          <span ref={counterRef} className="display text-[clamp(5rem,22vw,20rem)] leading-[0.78] text-paper tabular-nums">
+          <span ref={counterRef} lang="en" className="display text-[clamp(5rem,22vw,20rem)] leading-[0.78] text-paper tabular-nums">
             000
           </span>
-          <span className="mb-3 hidden font-mono text-[11px] tracking-[0.2em] text-mute uppercase sm:block">Tuning the notch…</span>
+          <span className="mb-3 hidden font-mono text-[11px] tracking-[0.2em] text-mute uppercase sm:block">{t.preloader}</span>
         </div>
       </motion.div>
     </div>

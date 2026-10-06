@@ -3,12 +3,45 @@
 import { ArrowUp } from "lucide-react";
 import { motion, useInView } from "motion/react";
 import { useRef } from "react";
-import { footer, site } from "@/content/site";
+import { site } from "@/content/site";
+import { LanguageSwitcher } from "@/components/language-switcher";
+import { useI18n } from "@/i18n/provider";
 
 const letters = site.name.toLowerCase().split("");
 
 /** Links, the small print, and a giant wordmark sinking behind stripes. */
 export function Footer() {
+  const { locale, t } = useI18n();
+  const footer = t.footer;
+  const columns = [
+    {
+      title: footer.columns.product,
+      links: [
+        [footer.links.download, site.links.download],
+        [footer.links.releases, site.links.releases],
+        [footer.links.changelog, site.links.changelog],
+        [footer.links.roadmap, site.links.roadmap],
+      ],
+    },
+    {
+      title: footer.columns.docs,
+      links: [
+        [footer.links.guide, site.links.guide[locale]],
+        [footer.links.contributing, site.links.contributing],
+        [footer.links.security, site.links.security],
+        [footer.links.issues, site.links.issues],
+      ],
+    },
+    {
+      title: footer.columns.contact,
+      links: [
+        [footer.links.github, site.author.github],
+        [footer.links.x, site.author.x],
+        [footer.links.instagram, site.author.instagram],
+      ],
+    },
+  ];
+
   // Watch the wrapper: the letters start clipped by their mask, which an
   // IntersectionObserver on the letters themselves would never report as visible.
   const wordmarkRef = useRef<HTMLDivElement>(null);
@@ -21,25 +54,28 @@ export function Footer() {
           <div className="flex items-center gap-3">
             {/* eslint-disable-next-line @next/next/no-img-element -- static export, pre-sized file */}
             <img src="/media/artwork-96.webp" alt="" width={40} height={40} className="size-10 rounded-[11px]" />
-            <span className="display text-3xl lowercase">{site.name}</span>
+            <span lang="en" className="display text-3xl lowercase">
+              {site.name}
+            </span>
             <span className="font-jp-text text-sm font-bold text-coral">{site.kana}</span>
           </div>
-          <p className="mt-5 max-w-xs text-[15px] leading-relaxed text-mute">Music, lyrics, and handy widgets in your Mac&apos;s notch.</p>
+          <p className="mt-5 max-w-xs text-[15px] leading-relaxed text-mute">{footer.tagline}</p>
+          <LanguageSwitcher variant="list" className="mt-8" />
         </div>
-        <nav aria-label="Footer" className="grid grid-cols-2 gap-10 sm:grid-cols-3 md:col-span-7">
-          {footer.columns.map((column) => (
+        <nav aria-label={footer.label} className="grid grid-cols-2 gap-10 sm:grid-cols-3 md:col-span-7">
+          {columns.map((column) => (
             <div key={column.title}>
               <h2 className="font-mono text-[11px] tracking-[0.18em] text-mute uppercase">{column.title}</h2>
               <ul className="mt-4 space-y-2.5">
-                {column.links.map((link) => (
-                  <li key={link.label}>
+                {column.links.map(([label, href]) => (
+                  <li key={label}>
                     <a
-                      href={link.href}
+                      href={href}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="group inline-flex items-center gap-1 text-[15px] text-paper/85 transition-colors hover:text-coral"
                     >
-                      {link.label}
+                      {label}
                     </a>
                   </li>
                 ))}
@@ -57,18 +93,18 @@ export function Footer() {
           </a>{" "}
           ·{" "}
           <a href={site.links.license} target="_blank" rel="noopener noreferrer" className="hover:text-coral">
-            MIT License
+            {footer.license}
           </a>
         </p>
         <p className="max-w-xl md:text-center">{footer.legal}</p>
         <a href="#top" className="group inline-flex items-center gap-2 text-paper/80 hover:text-coral">
-          Back to top
+          {footer.backToTop}
           <ArrowUp className="size-3.5 transition-transform group-hover:-translate-y-0.5" />
         </a>
       </div>
 
       <div ref={wordmarkRef} aria-hidden className="relative -mt-[1vw] select-none">
-        <p className="display flex justify-center text-[30vw] leading-[0.74] tracking-[-0.05em] text-ink-4">
+        <p lang="en" className="display flex justify-center text-[30vw] leading-[0.74] tracking-[-0.05em] text-ink-4">
           {letters.map((letter, i) => (
             <span key={i} className="inline-block overflow-hidden pt-[0.06em]">
               <motion.span

@@ -1,12 +1,13 @@
-// Turns the source PNGs in public/assets into responsive AVIF and WebP files in
+// Turns the source PNGs in assets/ into responsive AVIF and WebP files in
 // public/media, and writes src/content/media.json with each image's size and
-// widths. Run with `npm run images` after changing anything in public/assets.
+// widths. Run with `npm run images` after changing anything in assets/. The
+// sources stay outside public/ so they are not deployed.
 import { mkdir, readdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 
 const root = path.resolve(import.meta.dirname, "..");
-const sourceDir = path.join(root, "public/assets");
+const sourceDir = path.join(root, "assets");
 const outDir = path.join(root, "public/media");
 const manifestPath = path.join(root, "src/content/media.json");
 
@@ -21,7 +22,6 @@ const images = {
   "panel-focus": ["4-focus-timer-notes-preview.png", [519, 1038]],
   "panel-today": ["5-today-shortcuts-preview.png", [519, 1038]],
   "panel-tray": ["6-airdrop-tray-preview.png", [519, 1038]],
-  "panel-focus-empty": ["7-focus-timer-empty-preview.png", [519, 1038]],
   "setup-general": ["8-general-setup.png", [960, 1896]],
   "setup-tutorial": ["9-tutorial-setup.png", [960, 1896]],
   "setup-language": ["10-language-setup.png", [960, 1896]],

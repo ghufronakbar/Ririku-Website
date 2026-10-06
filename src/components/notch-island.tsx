@@ -7,16 +7,18 @@ import { demoSong } from "@/content/site";
 import { Picture, type MediaSlug } from "@/components/picture";
 import { Artwork, SeekBar, Transport } from "@/components/player";
 import { Spectrum } from "@/components/ui/spectrum";
+import { useI18n } from "@/i18n/provider";
 import { useIntroReady } from "@/lib/intro";
 import { useLyricState } from "@/lib/lyric-clock";
 import { cn } from "@/lib/cn";
 
-const tabs: { label: string; icon: typeof House; image?: MediaSlug; alt?: string }[] = [
-  { label: "Home", icon: House },
-  { label: "System", icon: LayoutGrid, image: "panel-system", alt: "System page: CPU, memory and disk use, battery, and the clock" },
-  { label: "Focus", icon: Gauge, image: "panel-focus", alt: "Focus page: Pomodoro, countdown and a note" },
-  { label: "Today", icon: Sparkles, image: "panel-today", alt: "A page with the calendar and Shortcuts" },
-  { label: "Tray", icon: Inbox, image: "panel-tray", alt: "The Tray, with AirDrop and a drop zone for files" },
+// Labels and alt text come from the dictionary's `island`, in this order.
+const tabs: { icon: typeof House; image?: MediaSlug }[] = [
+  { icon: House },
+  { icon: LayoutGrid, image: "panel-system" },
+  { icon: Gauge, image: "panel-focus" },
+  { icon: Sparkles, image: "panel-today" },
+  { icon: Inbox, image: "panel-tray" },
 ];
 
 // The screenshots are 1038 × 352 with a 64 px tab bar on top, which the
@@ -42,6 +44,7 @@ function useViewportWidth() {
  * into the panel on hover or tap, with live tabs and playback controls.
  */
 export function NotchIsland() {
+  const { t } = useI18n();
   const ready = useIntroReady();
   const vw = useViewportWidth();
   const mobile = vw < 640;
@@ -95,7 +98,7 @@ export function NotchIsland() {
     <motion.div
       ref={rootRef}
       role="region"
-      aria-label="Demo of Ririku's notch island"
+      aria-label={t.island.region}
       className="fixed top-0 left-1/2 z-[60] -translate-x-1/2"
       initial={{ y: -140 }}
       animate={{ y: ready ? 0 : -140 }}
@@ -152,14 +155,14 @@ export function NotchIsland() {
                 transition={{ duration: 0.4, delay: 0.08 }}
               >
                 <div className="flex h-[52px] items-center justify-between px-3.5">
-                  <div className="flex gap-1" role="tablist" aria-label="Panel pages">
+                  <div className="flex gap-1" role="tablist" aria-label={t.island.tablist}>
                     {tabs.map((item, i) => (
                       <button
-                        key={item.label}
+                        key={i}
                         type="button"
                         role="tab"
                         aria-selected={tab === i}
-                        aria-label={item.label}
+                        aria-label={t.island.tabs[i]}
                         onClick={() => setTab(i)}
                         className={cn(
                           "grid size-9 place-items-center rounded-xl transition-colors",
@@ -172,7 +175,7 @@ export function NotchIsland() {
                   </div>
                   <a
                     href="#setup"
-                    aria-label="Setup"
+                    aria-label={t.island.setup}
                     onClick={() => setOpen(false)}
                     className="grid size-9 place-items-center rounded-xl text-paper/80 hover:text-paper"
                   >
@@ -193,7 +196,7 @@ export function NotchIsland() {
                       <div className="relative overflow-hidden" style={{ height: Math.round(openWidth * SHOT_RATIO) }}>
                         <Picture
                           slug={tabs[tab].image!}
-                          alt={tabs[tab].alt!}
+                          alt={t.island.tabAlts[tab]}
                           sizes="540px"
                           className="absolute inset-x-0 bottom-0 block"
                           imgClassName="block h-auto w-full"
@@ -211,7 +214,7 @@ export function NotchIsland() {
           <button
             type="button"
             aria-expanded={false}
-            aria-label="Expand the demo panel"
+            aria-label={t.island.expand}
             className="absolute inset-0 cursor-pointer rounded-[inherit]"
             onClick={() => setOpen(true)}
           />

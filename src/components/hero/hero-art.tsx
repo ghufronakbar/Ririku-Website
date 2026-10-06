@@ -129,7 +129,7 @@ type Phase = "fallback" | "ready" | "live";
  * WebGL shader. The plain image underneath is the LCP image, the no-JS view,
  * and the fallback for reduced motion or missing WebGL.
  */
-export function HeroArt({ className }: { className?: string }) {
+export function HeroArt({ alt, className }: { alt: string; className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imgWrapRef = useRef<HTMLDivElement>(null);
   const introReady = useIntroReady();
@@ -312,7 +312,7 @@ export function HeroArt({ className }: { className?: string }) {
         <div className="absolute inset-0 bg-[radial-gradient(60%_70%_at_42%_50%,rgb(193_21_103/0.35),transparent_70%)]" />
         <Picture
           slug="character"
-          alt="Ririku's character: an anime girl with a black and red bob and a cybernetic neck, in coral and magenta."
+          alt={alt}
           sizes="(max-aspect-ratio: 11/10) 84vh, 112vh"
           priority
           className="absolute top-[calc(var(--fy)*100%)] left-[calc(var(--fx)*100%)] block aspect-square h-[calc(var(--s)*100%)] -translate-x-1/2 -translate-y-1/2"

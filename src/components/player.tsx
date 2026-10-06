@@ -4,6 +4,7 @@ import { Pause, Play, SkipBack, SkipForward } from "lucide-react";
 import { useCallback, useRef } from "react";
 import { demoSong } from "@/content/site";
 import { mediaSrc } from "@/components/picture";
+import { useI18n } from "@/i18n/provider";
 import { formatTime, lyricClock, songOffset, useLyricFrame } from "@/lib/lyric-clock";
 import { cn } from "@/lib/cn";
 
@@ -53,20 +54,21 @@ export function SeekBar({ className }: { className?: string }) {
 }
 
 export function Transport({ playing, className }: { playing: boolean; className?: string }) {
+  const { t } = useI18n();
   return (
     <div className={cn("flex items-center justify-center gap-10", className)}>
-      <button type="button" aria-label="Previous line" onClick={lyricClock.prev} className="grid size-9 place-items-center rounded-full transition-colors hover:bg-white/10">
+      <button type="button" aria-label={t.island.prev} onClick={lyricClock.prev} className="grid size-9 place-items-center rounded-full transition-colors hover:bg-white/10">
         <SkipBack className="size-5 fill-current" />
       </button>
       <button
         type="button"
-        aria-label={playing ? "Pause the demo song" : "Play the demo song"}
+        aria-label={playing ? t.island.pause : t.island.play}
         onClick={lyricClock.toggle}
         className="grid size-10 place-items-center rounded-full transition-colors hover:bg-white/10"
       >
         {playing ? <Pause className="size-6 fill-current" /> : <Play className="size-6 fill-current" />}
       </button>
-      <button type="button" aria-label="Next line" onClick={lyricClock.next} className="grid size-9 place-items-center rounded-full transition-colors hover:bg-white/10">
+      <button type="button" aria-label={t.island.next} onClick={lyricClock.next} className="grid size-9 place-items-center rounded-full transition-colors hover:bg-white/10">
         <SkipForward className="size-5 fill-current" />
       </button>
     </div>

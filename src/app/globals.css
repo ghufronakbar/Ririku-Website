@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Per-language tweaks, e.g. lang-ja:text-[8vw] for longer Japanese headings. */
+@custom-variant lang-ja (&:lang(ja));
+@custom-variant lang-id (&:lang(id));
+
 @theme {
   /* Notch black, with the coral, magenta and crimson of the app icon. */
   --color-ink: #060608;
@@ -119,6 +123,33 @@
     font-weight: 640;
     letter-spacing: -0.032em;
     line-height: 0.9;
+  }
+
+  /* Japanese headings: Dela Gothic One has the poster weight built in. */
+  :lang(ja) .display {
+    font-family: var(--font-dela), "Hiragino Sans", "Yu Gothic", sans-serif;
+    font-variation-settings: normal;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    line-height: 1.12;
+  }
+
+  /* The intro paragraph. */
+  .statement {
+    font-family: var(--font-display);
+    font-variation-settings:
+      "wdth" 88,
+      "opsz" 72;
+    font-weight: 520;
+    letter-spacing: -0.022em;
+    line-height: 1.04;
+  }
+  :lang(ja) .statement {
+    font-family: var(--font-jp-text);
+    font-variation-settings: normal;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1.45;
   }
 
   .halftone {
