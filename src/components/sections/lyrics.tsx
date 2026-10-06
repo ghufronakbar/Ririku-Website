@@ -2,11 +2,12 @@
 
 import { motion, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from "motion/react";
 import { useLayoutEffect, useRef, useState } from "react";
-import { demoSong, lyrics, site } from "@/content/site";
+import { demoSong, site } from "@/content/site";
 import { Artwork, SeekBar, Transport } from "@/components/player";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
 import { SplitReveal } from "@/components/ui/split-reveal";
+import { useI18n } from "@/i18n/provider";
 import { lyricClock, useLyricState } from "@/lib/lyric-clock";
 import { cn } from "@/lib/cn";
 
@@ -41,6 +42,7 @@ function Toggle({ on, onChange, children }: { on: boolean; onChange: (on: boolea
 
 /** A large synced-lyrics view of the demo song. Click a line to jump to it. */
 function LyricsPlayer() {
+  const { locale, t } = useI18n();
   const { index, playing } = useLyricState();
   const [romaji, setRomaji] = useState(true);
   const [translation, setTranslation] = useState(true);
@@ -70,10 +72,10 @@ function LyricsPlayer() {
         </div>
         <div className="flex gap-2">
           <Toggle on={romaji} onChange={setRomaji}>
-            {lyrics.toggles.romaji}
+            {t.lyrics.romaji}
           </Toggle>
           <Toggle on={translation} onChange={setTranslation}>
-            {lyrics.toggles.translation}
+            {t.lyrics.translation}
           </Toggle>
         </div>
       </div>
@@ -94,7 +96,7 @@ function LyricsPlayer() {
                 >
                   <span className={cn("block text-[22px] leading-snug font-bold md:text-[28px]", active && "text-[#ffb4ad]")}>{line.jp}</span>
                   {active && romaji && <span className="mt-1 block text-[14px] text-paper/55 italic md:text-[15px]">{line.romaji}</span>}
-                  {active && translation && <span className="mt-1 block text-[14px] text-paper/80 md:text-[15px]">{line.en}</span>}
+                  {active && translation && <span className="mt-1 block text-[14px] text-paper/80 md:text-[15px]">{locale === "id" ? line.id : line.en}</span>}
                 </button>
               </li>
             );
@@ -113,6 +115,8 @@ function LyricsPlayer() {
  * scrolls in, with the story on the left and a live lyrics player on the right.
  */
 export function Lyrics() {
+  const { locale, t } = useI18n();
+  const lyrics = t.lyrics;
   const cardRef = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: cardRef, offset: ["start end", "start 0.15"] });
@@ -139,13 +143,13 @@ export function Lyrics() {
         <div className="relative grid gap-12 px-5 py-16 md:px-12 md:py-24 lg:grid-cols-12 lg:gap-10 lg:px-16">
           <div className="lg:col-span-6 xl:col-span-5">
             <p className="kicker text-paper/80 before:bg-paper">{lyrics.kicker}</p>
-            <SplitReveal lines={lyrics.title} className="display mt-6 text-[clamp(3rem,7vw,7rem)]" />
+            <SplitReveal lines={lyrics.title} className="display mt-6 text-[clamp(3rem,7vw,7rem)] lang-id:text-[clamp(2.6rem,5.4vw,5.75rem)] lang-ja:text-[clamp(2.6rem,5.5vw,5.75rem)]" />
             <Reveal delay={0.15} className="mt-8 max-w-lg space-y-5 text-[15px] leading-relaxed text-paper/80 md:text-base">
               <p>{lyrics.body}</p>
               <p className="border-l-2 border-paper/30 pl-4 text-paper/70">{lyrics.japanese}</p>
             </Reveal>
             <Reveal delay={0.25} className="mt-9">
-              <Button href={site.links.guide} variant="light">
+              <Button href={site.links.guide[locale]} variant="light">
                 {lyrics.cta}
               </Button>
             </Reveal>

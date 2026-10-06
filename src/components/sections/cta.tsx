@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from "motion/react";
 import { useRef } from "react";
-import { cta, site } from "@/content/site";
+import { site } from "@/content/site";
 import { Picture, type MediaSlug } from "@/components/picture";
 import { Artwork } from "@/components/player";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import { GithubIcon } from "@/components/ui/github-icon";
 import { Reveal } from "@/components/ui/reveal";
 import { Spectrum } from "@/components/ui/spectrum";
 import { SplitReveal } from "@/components/ui/split-reveal";
+import { useI18n } from "@/i18n/provider";
 
 const cards: { slug: MediaSlug; rotate: number; x: string; y: number; bg: string; pad: string }[] = [
   { slug: "panel-system", rotate: -16, x: "-104%", y: 70, bg: "#fe544d", pad: "px-4 pt-10" },
@@ -48,6 +49,8 @@ function Card({ card, i, progress }: { card: (typeof cards)[number]; i: number; 
 
 /** The last ask: the icon, one line, two buttons, and a fan of cards rising. */
 export function Cta() {
+  const { t } = useI18n();
+  const cta = t.cta;
   const fanRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: fanRef, offset: ["start end", "end end"] });
 
@@ -62,7 +65,7 @@ export function Cta() {
           </div>
           <Spectrum bars={5} className="h-4 text-coral" />
         </Reveal>
-        <SplitReveal lines={cta.title} className="display mt-8 text-[clamp(3.4rem,11vw,11rem)] lowercase" />
+        <SplitReveal lines={cta.title} className="display mt-8 text-[clamp(3.4rem,11vw,11rem)] lang-ja:text-[clamp(2.5rem,8vw,8.5rem)]" />
         <Reveal delay={0.2} className="mx-auto mt-7 max-w-md text-[15px] leading-relaxed text-mute md:text-base">
           {cta.body}
         </Reveal>

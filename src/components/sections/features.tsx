@@ -2,10 +2,11 @@
 
 import { motion } from "motion/react";
 import { useState } from "react";
-import { features } from "@/content/site";
+import { featureImages } from "@/content/site";
 import { Picture, type MediaSlug } from "@/components/picture";
 import { SplitReveal } from "@/components/ui/split-reveal";
 import { Reveal } from "@/components/ui/reveal";
+import { useI18n } from "@/i18n/provider";
 import { cn } from "@/lib/cn";
 
 const gradients = [
@@ -17,7 +18,6 @@ const gradients = [
   "radial-gradient(120% 90% at 60% 0%, #3b3e4f 0%, #1d212b 50%, #0b0c10 100%)",
 ];
 
-type Card = (typeof features.cards)[number];
 
 function Shot({ image, title, active, wide }: { image: MediaSlug; title: string; active: boolean; wide: number }) {
   return (
@@ -41,6 +41,8 @@ function Shot({ image, title, active, wide }: { image: MediaSlug; title: string;
  * the panel per card, on its own colour. On phones it becomes a swipeable row.
  */
 export function Features() {
+  const { t } = useI18n();
+  const features = t.features;
   const [active, setActive] = useState(0);
 
   return (
@@ -48,17 +50,17 @@ export function Features() {
       <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
         <div>
           <p className="kicker">{features.kicker}</p>
-          <SplitReveal lines={[features.title]} className="display mt-5 text-[clamp(2.8rem,7.5vw,7.5rem)]" />
+          <SplitReveal lines={[features.title]} className="display mt-5 text-[clamp(2.8rem,7.5vw,7.5rem)] lang-ja:text-[clamp(2.4rem,6vw,6rem)]" />
         </div>
         <Reveal className="max-w-xs text-[15px] leading-relaxed text-mute md:text-right" delay={0.2}>
-          Music in the compact island, and pages of widgets one hover away. These are the author&apos;s pages; yours are up to you.
+          {features.intro}
         </Reveal>
       </div>
 
       <div className="mt-12 hidden h-[min(70vh,660px)] gap-3 md:flex" role="list">
-        {features.cards.map((card: Card, i) => (
+        {features.cards.map((card, i) => (
           <motion.article
-            key={card.title}
+            key={i}
             role="listitem"
             tabIndex={0}
             onPointerEnter={() => setActive(i)}
@@ -72,7 +74,7 @@ export function Features() {
           >
             <div className="relative flex-1 overflow-hidden rounded-[22px] ring-paper/40 group-focus-visible:ring-2" style={{ background: gradients[i] }}>
               <div aria-hidden className="halftone absolute inset-0 text-white/[0.09]" />
-              <Shot image={card.image} title={card.title} active={active === i} wide={card.image === "island" ? 420 : 560} />
+              <Shot image={featureImages[i]} title={card.title} active={active === i} wide={featureImages[i] === "island" ? 420 : 560} />
               <span className="absolute top-4 left-4 font-mono text-[11px] tracking-[0.18em] text-white/80">0{i + 1}</span>
             </div>
             <div className="h-[88px] pt-4">
@@ -91,11 +93,11 @@ export function Features() {
       </div>
 
       <div className="-mx-5 mt-10 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-2 [scrollbar-width:none] md:hidden" data-lenis-prevent-horizontal>
-        {features.cards.map((card: Card, i) => (
-          <article key={card.title} className="w-[82vw] max-w-sm shrink-0 snap-center">
+        {features.cards.map((card, i) => (
+          <article key={i} className="w-[82vw] max-w-sm shrink-0 snap-center">
             <div className="relative aspect-[4/5] overflow-hidden rounded-[20px]" style={{ background: gradients[i] }}>
               <div aria-hidden className="halftone absolute inset-0 text-white/[0.09]" />
-              <Shot image={card.image} title={card.title} active wide={card.image === "island" ? 280 : 320} />
+              <Shot image={featureImages[i]} title={card.title} active wide={featureImages[i] === "island" ? 280 : 300} />
               <span className="absolute top-4 left-4 font-mono text-[11px] tracking-[0.18em] text-white/80">0{i + 1}</span>
             </div>
             <h3 className="mt-4 text-lg font-medium tracking-tight">{card.title}</h3>

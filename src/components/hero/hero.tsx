@@ -3,12 +3,13 @@
 import { ArrowDown } from "lucide-react";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
-import { hero, site } from "@/content/site";
+import { site } from "@/content/site";
 import { HeroArt } from "@/components/hero/hero-art";
 import { Button } from "@/components/ui/button";
 import { GithubIcon } from "@/components/ui/github-icon";
 import { Reveal } from "@/components/ui/reveal";
 import { SplitReveal } from "@/components/ui/split-reveal";
+import { useI18n } from "@/i18n/provider";
 import { useIntroReady } from "@/lib/intro";
 
 /**
@@ -16,6 +17,8 @@ import { useIntroReady } from "@/lib/intro";
  * shrinks into a rounded card, like a video settling into the page.
  */
 export function Hero() {
+  const { t } = useI18n();
+  const hero = t.hero;
   const ref = useRef<HTMLElement>(null);
   const ready = useIntroReady();
   const reduce = useReducedMotion();
@@ -28,7 +31,7 @@ export function Hero() {
   return (
     <section ref={ref} id="top" className="relative h-[100svh] min-h-[600px]">
       <motion.div style={{ scale, borderRadius: radius }} className="absolute inset-0 origin-top overflow-hidden bg-ink">
-        <HeroArt />
+        <HeroArt alt={hero.artAlt} />
 
         {/* Legibility: darken the bottom and, on wide screens, the left. */}
         <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-[70%] bg-gradient-to-t from-ink via-ink/70 to-transparent" />
@@ -54,17 +57,17 @@ export function Hero() {
             lines={hero.title}
             show={ready}
             delay={0.2}
-            className="display mt-4 text-[clamp(3.3rem,11.5vw,13rem)] lowercase md:mt-5"
+            className="display mt-4 text-[clamp(3.3rem,11.5vw,13rem)] md:mt-5 lang-ja:text-[clamp(2.5rem,7.8vw,9rem)]"
           />
           <div className="mt-7 flex flex-col gap-8 md:mt-9 md:flex-row md:items-end md:justify-between">
-            <Reveal show={ready} delay={0.55} className="max-w-[30rem]">
+            <Reveal show={ready} delay={0.55} className="max-w-[30rem] lang-ja:max-w-[34rem]">
               <p className="text-[15px] leading-relaxed text-paper/75 md:text-base">{hero.body}</p>
               <div className="mt-6 flex flex-wrap items-center gap-3">
                 <Button href={site.links.download} size="lg">
-                  Download for macOS
+                  {hero.download}
                 </Button>
                 <Button href={site.links.repo} variant="ghost" size="lg" icon={<GithubIcon className="size-4" />}>
-                  View on GitHub
+                  {hero.github}
                 </Button>
               </div>
             </Reveal>
@@ -75,8 +78,8 @@ export function Hero() {
                   <li key={item}>{item}</li>
                 ))}
               </ul>
-              <a href="#statement" className="group flex flex-col items-center gap-3 text-paper/70 hover:text-paper" aria-label="Scroll to learn more">
-                <span className="font-mono text-[11px] tracking-[0.18em] uppercase [writing-mode:vertical-rl]">Scroll</span>
+              <a href="#statement" className="group flex flex-col items-center gap-3 text-paper/70 hover:text-paper" aria-label={hero.scrollLabel}>
+                <span className="font-mono text-[11px] tracking-[0.18em] uppercase [writing-mode:vertical-rl]">{hero.scroll}</span>
                 <span className="relative h-14 w-px overflow-hidden bg-paper/20">
                   <span className="absolute inset-x-0 top-0 h-1/2 animate-[scroll-cue_1.8s_var(--ease-in-out-quart)_infinite] bg-coral" />
                 </span>

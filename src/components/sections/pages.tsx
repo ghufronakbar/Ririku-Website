@@ -2,12 +2,13 @@
 
 import { motion, useMotionTemplate, useMotionValue, useReducedMotion, useScroll, useTransform, type MotionValue } from "motion/react";
 import { useRef } from "react";
-import { pages, widgets } from "@/content/site";
 import { Picture } from "@/components/picture";
 import { Reveal } from "@/components/ui/reveal";
 import { SplitReveal } from "@/components/ui/split-reveal";
+import type { Dictionary } from "@/i18n";
+import { useI18n } from "@/i18n/provider";
 
-type Strip = (typeof pages.strips)[number];
+type Strip = Dictionary["pages"]["strips"][number];
 
 /**
  * One slice of the character art. Each slice holds the whole picture, shifted
@@ -47,7 +48,7 @@ function Slice({ strip, i, count, progress }: { strip: Strip; i: number; count: 
 }
 
 /** A widget card with a soft spotlight that follows the pointer. */
-function WidgetCard({ item, i }: { item: (typeof widgets.items)[number]; i: number }) {
+function WidgetCard({ item, i }: { item: Dictionary["widgets"]["items"][number]; i: number }) {
   const x = useMotionValue(-200);
   const y = useMotionValue(-200);
   const spotlight = useMotionTemplate`radial-gradient(220px circle at ${x}px ${y}px, rgb(254 84 77 / 0.16), transparent 70%)`;
@@ -72,7 +73,7 @@ function WidgetCard({ item, i }: { item: (typeof widgets.items)[number]; i: numb
       <motion.div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: spotlight }} />
       <div className="relative flex items-start justify-between gap-2">
         <span className="font-mono text-[11px] text-mute">{String(i + 1).padStart(2, "0")}</span>
-        {"tag" in item && item.tag && (
+        {item.tag && (
           <span className="rounded-full border border-paper/15 px-2 py-0.5 font-mono text-[9.5px] tracking-[0.12em] text-paper/70 uppercase">{item.tag}</span>
         )}
       </div>
@@ -84,6 +85,8 @@ function WidgetCard({ item, i }: { item: (typeof widgets.items)[number]; i: numb
 
 /** Pages of widgets: the default layout as five slices, then every widget. */
 export function Pages() {
+  const { t } = useI18n();
+  const { pages, widgets } = t;
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "center center"] });
@@ -93,9 +96,9 @@ export function Pages() {
 
   return (
     <section id="widgets" className="px-5 py-24 md:px-10 md:py-32">
-      <div className="mx-auto max-w-4xl text-center">
+      <div className="mx-auto max-w-6xl text-center">
         <p className="kicker">{pages.kicker}</p>
-        <SplitReveal lines={[pages.title]} className="display mt-6 text-[clamp(2.8rem,8vw,8rem)]" />
+        <SplitReveal lines={[pages.title]} className="display mt-6 text-[clamp(2.8rem,8vw,8rem)] lang-ja:text-[clamp(2rem,6vw,6rem)]" />
         <Reveal delay={0.15} className="mx-auto mt-7 max-w-xl text-[15px] leading-relaxed text-mute md:text-base">
           {pages.body}
         </Reveal>
@@ -107,7 +110,7 @@ export function Pages() {
         className="mx-auto mt-14 flex h-[min(78vh,760px)] max-w-[1500px] md:mt-20"
       >
         {pages.strips.map((strip, i) => (
-          <Slice key={strip.name} strip={strip} i={i} count={pages.strips.length} progress={scrollYProgress} />
+          <Slice key={i} strip={strip} i={i} count={pages.strips.length} progress={scrollYProgress} />
         ))}
       </motion.div>
 
@@ -118,7 +121,7 @@ export function Pages() {
         </div>
         <ul className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {widgets.items.map((item, i) => (
-            <WidgetCard key={item.name} item={item} i={i} />
+            <WidgetCard key={i} item={item} i={i} />
           ))}
         </ul>
       </div>
