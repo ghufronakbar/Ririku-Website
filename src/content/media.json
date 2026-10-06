@@ -1,0 +1,163 @@
+{
+  "character": {
+    "width": 1024,
+    "height": 1024,
+    "widths": [
+      640,
+      1280,
+      2048
+    ]
+  },
+  "artwork": {
+    "width": 1024,
+    "height": 1024,
+    "widths": [
+      96,
+      192
+    ]
+  },
+  "island": {
+    "width": 658,
+    "height": 172,
+    "widths": [
+      329,
+      658
+    ]
+  },
+  "panel-music": {
+    "width": 1038,
+    "height": 526,
+    "widths": [
+      519,
+      1038
+    ]
+  },
+  "panel-system": {
+    "width": 1038,
+    "height": 352,
+    "widths": [
+      519,
+      1038
+    ]
+  },
+  "panel-focus": {
+    "width": 1038,
+    "height": 352,
+    "widths": [
+      519,
+      1038
+    ]
+  },
+  "panel-today": {
+    "width": 1038,
+    "height": 352,
+    "widths": [
+      519,
+      1038
+    ]
+  },
+  "panel-tray": {
+    "width": 1038,
+    "height": 352,
+    "widths": [
+      519,
+      1038
+    ]
+  },
+  "panel-focus-empty": {
+    "width": 1038,
+    "height": 352,
+    "widths": [
+      519,
+      1038
+    ]
+  },
+  "setup-general": {
+    "width": 1896,
+    "height": 1628,
+    "widths": [
+      960,
+      1896
+    ]
+  },
+  "setup-tutorial": {
+    "width": 1896,
+    "height": 1628,
+    "widths": [
+      960,
+      1896
+    ]
+  },
+  "setup-language": {
+    "width": 1896,
+    "height": 1628,
+    "widths": [
+      960,
+      1896
+    ]
+  },
+  "setup-keyboard": {
+    "width": 1896,
+    "height": 1628,
+    "widths": [
+      960,
+      1896
+    ]
+  },
+  "setup-layout": {
+    "width": 1896,
+    "height": 1628,
+    "widths": [
+      960,
+      1896
+    ]
+  },
+  "setup-widgets": {
+    "width": 1896,
+    "height": 1628,
+    "widths": [
+      960,
+      1896
+    ]
+  },
+  "setup-appearance": {
+    "width": 1896,
+    "height": 1628,
+    "widths": [
+      960,
+      1896
+    ]
+  },
+  "setup-browser": {
+    "width": 1896,
+    "height": 1628,
+    "widths": [
+      960,
+      1896
+    ]
+  },
+  "setup-music-source": {
+    "width": 1896,
+    "height": 1628,
+    "widths": [
+      960,
+      1896
+    ]
+  },
+  "setup-lyrics": {
+    "width": 1896,
+    "height": 1628,
+    "widths": [
+      960,
+      1896
+    ]
+  },
+  "setup-about": {
+    "width": 1896,
+    "height": 1628,
+    "widths": [
+      960,
+      1896
+    ]
+  }
+}
